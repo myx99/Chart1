@@ -25,6 +25,7 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 logger.info(50 * "-" + "Calculate CSI300 Index" + 50 * "-")
+
 # Open market data table
 data_mkt = xd.open_workbook("C:\\temp\\mkt_csi300.xls")
 table_mkt = data_mkt.sheets()[0]
