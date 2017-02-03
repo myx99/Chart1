@@ -9,10 +9,10 @@ data_mkt = xd.open_workbook("D:\\app\\mysvn\\files\\test.xlsx")
 table_mkt = data_mkt.sheets()[0]
 
 # Get close price based on the stockid and calculate the weight
-index = np.array()
+index = np.array([])
 for row_mkt in range(table_mkt.nrows):
     stock_id_raw = table_mkt.row(row_mkt)[0].value  # A column
-    weight = float(table_mkt.row(row_mkt)[1].value.lstrip().rstrip())  # B column
+    weight = table_mkt.row(row_mkt)[1].value  # B column
     market = stock_id_raw[-2:]
     stock_id = stock_id_raw[:-3]
 
