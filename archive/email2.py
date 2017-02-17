@@ -14,8 +14,9 @@ def sendMail(FROM,TO,SUBJECT,TEXT,SERVER):
     server = smtplib.SMTP(host=SERVER,port=25)
     # "New part"
     server.starttls()
-    username = 'huajingsec\\taoma'
+    username = 'taoma@huajingsec.com'
     password = 'Huajingsec@2017'
+    password = 'Matao_2012'
     server.login(username, password)
     server.sendmail(FROM, TO, message)
     server.quit()
