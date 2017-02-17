@@ -19,10 +19,25 @@ svr.starttls()
 svr.docmd("HELO server")
 
 # Auth
-username = "taoma@huajingsec.com" # not work
+username = "taoma@huajingsec.com"
 password = "Huajingsec@2017"
 svr.login(username, password)
 
 # send
 svr.sendmail(from_addr,to_addr,msg.as_string())
+
+def sendemail_hjsec(receiver, subject, body):
+    mailserver = "mail.huajingsec.com"
+    sender = "taoma@huajingsec.com"
+    sender_password = "Huajingsec@2017"
+    svr = smtplib.SMTP(mailserver, 465)
+    svr.starttls()
+    svr.docmd("HELO server")
+    svr.login(sender, sender_password)
+    msg = MIMEText(body, 'html')
+    msg['subject'] = subject
+    msg['from'] = from_addr
+    msg['to'] = to_addr
+    svr.sendmail(sender, receiver, msg.as_string())
+
 
