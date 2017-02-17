@@ -8,35 +8,62 @@ import xlrd as xd
 data_mkt = xd.open_workbook("D:\\app\\mysvn\\files\\test.xlsx")
 table_mkt = data_mkt.sheets()[0]
 
+# Set period
+start_date = "2016-01-01"
+end_date = "2016-01-06"
+
+# Start Wind api
+w.start()
+
+# Create dataframe using dates as index
+# Get date list
+dates = w.tdays(start_date, end_date, "")
+date_raw = dates.Times
+date_count = dates.Times.__len__()
+index_dates = []
+for i in range(date_count):
+    date_format = str(date_raw[i])[:10]
+    index_dates.append(date_format)
+# Create dataframe using dates as index
+df = pd.DataFrame(index=index_dates)
+# print(df)
+columns = []
+
 # Get close price based on the stockid and calculate the weight
-index = np.array([])
 for row_mkt in range(table_mkt.nrows):
     stock_id_raw = table_mkt.row(row_mkt)[0].value  # A column
     weight = table_mkt.row(row_mkt)[1].value  # B column
     market = stock_id_raw[-2:]
     stock_id = stock_id_raw[:-3]
 
-    # Test to print stock id, market and weight TODO; DELETE
-    #print("stock id: " + str(stock_id) + '\t' + "market: " + str(market) + '\t' + "weight: " + str(weight))
-
     # Get market data from WIND
-    w.start()
-    data = w.wsd(stock_id_raw, "close", "2016-01-01", "2016-06-30", "Fill=Previous")
-    index_by_close_price = data.Data[0]
-    index_duration = data.Times
-    w.stop()
+    data = w.wsd(stock_id_raw, "close", start_date, end_date, "Fill=Previous")
+    index_by_close_price = [round(float(i)*weight,4) for i in data.Data[0]]
+    # print(index_by_close_price )
 
-    # Test to print market data TODO: DELETE
-    # print(index_by_close_price[:10])
-    # print(index_duration[:10])
+    # Add data to dataframe
+    df[stock_id_raw] = pd.Series(index_by_close_price, index=df.index)
+    columns.append(stock_id_raw)
 
-    # Cal index
-    index.append(index_by_close_price)
-    print(index)
+# Stop Wind API
+w.stop()
 
-# show by plot
-# x = [index_duration[i] for i in range(index_duration.__len__())]
-# y = [index[i] for i in range(index.__len__())]
-# plt.plot(x, y)
+print(df)
+
+# Aggregate
+f1 = [lambda s: s[0] + s[i] for i in range(1, columns.__len__())]
+sum_df = df.apply(f1, axis=1)
+print(sum_df)
+
+column_sum = []
+for i in range(columns.__len__()):
+    print(df.valu[columns[i]])
+    column_sum += df[columns[i]]
+print(column_sum)
+
+
+# Display
+# df.plot()
 # plt.show()
+
 
