@@ -1,5 +1,3 @@
-# -*- coding=utf-8 -*-
-
 import pymysql
 from dbfread import DBF
 
@@ -14,7 +12,11 @@ for row in table.records:
     temp_row_list = []
     for key in row:
         # temp_row_list.append(row.get(key).decode('gb2312'))
-        temp_row_list.append(row.get(key))
+        if not (type(row.get(key)) is type(0.0)):
+            value = (str(row.get(key)))
+        else:
+            value = row.get(key)
+        temp_row_list.append(value)
     # temp_row_list.append(row.get('FfDate'))
     # temp_row_list.append(unicode(row.get('A0')), "gbk2312")
     # temp_row_list.append(row.get('A1'))
@@ -36,7 +38,7 @@ for row in table.records:
 
     print(temp_row_list)
     print(tuple(temp_row_list))
-    insert_statement = "insert into Valuation values(%s,%s,%s,%f,%f,%f,%f,%c,%c,%c,%s,%s,%f,%f,%f,%f,%f,%d)" % tuple(temp_row_list)
+    insert_statement = "insert into Valuation values(%s,%s,%s,%f,%f,%f,%f,\'%s\',%s,%s,%s,%s,%f,%f,%f,%f,%f,%s)" % tuple(temp_row_list)
     insert_result = cur.execute(insert_statement)
     conn.commit()
     print(insert_result)
