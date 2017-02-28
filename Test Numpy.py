@@ -32,4 +32,15 @@ d = a.tolist()
 
 x, y = 1,2
 x += y
-print('taoma@huajingsec.com')
+# print('taoma@huajingsec.com')
+
+temp_row_list = [0,1,2,]
+def replace_none_value(startpoint, endpoint, givenvalue):
+    for i in temp_row_list[startpoint:endpoint]:
+        if i is None:
+            temp_row_list[i.index()] = givenvalue
+
+
+replace_none_value(3, 7, 0.0)
+replace_none_value(12, 17, 0.0)
+replace_none_value(-1, '', 0)

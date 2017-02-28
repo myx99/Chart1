@@ -1,55 +1,79 @@
 import pymysql
 from dbfread import DBF
 
-# set mysql connection
-conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='Matao_2012', db='test')
-cur = conn.cursor()
+# define dbf to mysql function
+def dbf_to_mysql(filedate, filename):
 
-# load dbf and insert to db
-dbf_file = "D:\\data\\valuation\\20170222\\GZFB0002.dbf"
-table = DBF(filename=dbf_file, load=True, encoding="gb2312")
-for row in table.records:
-    temp_row_list = []
-    for key in row:
-        # temp_row_list.append(row.get(key).decode('gb2312'))
-        if not (type(row.get(key)) is type(0.0)):
-            value = (str(row.get(key)))
-        else:
-            value = row.get(key)
-        temp_row_list.append(value)
-    # temp_row_list.append(row.get('FfDate'))
-    # temp_row_list.append(unicode(row.get('A0')), "gbk2312")
-    # temp_row_list.append(row.get('A1'))
-    # temp_row_list.append(row.get('A2'))
-    # temp_row_list.append(row.get('A3'))
-    # temp_row_list.append(row.get('A4'))
-    # temp_row_list.append(row.get('A5'))
-    # temp_row_list.append(row.get('A6'))
-    # temp_row_list.append(row.get('A7'))
-    # temp_row_list.append(row.get('A8'))
-    # temp_row_list.append(row.get('A9'))
-    # temp_row_list.append(row.get('A10'))
-    # temp_row_list.append(row.get('A11'))
-    # temp_row_list.append(row.get('A12'))
-    # temp_row_list.append(row.get('A13'))
-    # temp_row_list.append(row.get('A14'))
-    # temp_row_list.append(row.get('A15'))
-    # temp_row_list.append(row.get('L_SFQR'))
+    # set mysql connection
+    conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='Matao_2012', db='test', use_unicode=True, charset="utf8")
+    cur = conn.cursor()
 
-    print(temp_row_list)
-    print(tuple(temp_row_list))
-    insert_statement = "insert into Valuation values(%s,%s,%s,%f,%f,%f,%f,\'%s\',%s,%s,%s,%s,%f,%f,%f,%f,%f,%s)" % tuple(temp_row_list)
-    insert_result = cur.execute(insert_statement)
-    conn.commit()
-    print(insert_result)
+    # load dbf and insert to db
+    dbf_file = "D:\\data\\valuation\\%s\\%s.dbf" % filedate, filename
+    table = DBF(filename=dbf_file, load=True, encoding="gb2312")
+    # product = dbf_file[-12:-4]
+    product = filename
 
-# check insert result
-select_statement = "select * from Valuation"
-select_result = cur.execute(select_statement)
-conn.commit()
-print(select_result)
+    # get record
+    for row in table.records:
+        temp_row_list = []
 
-# close mysql connection
-cur.close()
-conn.close()
+        # filter empty lines
+        if row.get('A0') == '' or row.get('Ffdate') == '':
+            continue
 
+        # get values for each rows
+        for key in row:
+            x = row.get(key)
+            if not (type(x) is type(0.0)):
+                value1 = str(x).encode('utf-8').decode('utf-8')
+                value = "'%s'" % value1
+            else:
+                value = x
+            temp_row_list.append(value)
+
+        # mark product id
+        product_id = "'%s'" % str(product).encode('utf-8').decode('utf-8')
+        temp_row_list.append(product_id)
+
+        # replace None with 0.0/0 for float/int field
+        ## define a method first
+        def replace_none_value(list, startpoint, endpoint, givenvalue):
+            s = int(startpoint)
+            if endpoint == 'null':  # single item
+                if list[s] ==  "'None'":
+                    list[s] = givenvalue
+                return list
+            else:
+                e = int(endpoint)
+                for i in list[s:e]:  # multiple items
+                    if i ==  "'None'":
+                        list[list.index(i)] = givenvalue
+                return list
+        ## execute the method
+        row_list = replace_none_value(temp_row_list,3,7,0.0)
+        row_list = replace_none_value(temp_row_list,12,17,0.0)
+        row_list = replace_none_value(temp_row_list,-2,'null',0)
+
+        # format list to tuple
+        insert_values = tuple(row_list)
+        print(row_list)
+        print(insert_values)
+
+        # compile sql statement
+        insert_statement = """insert into Valuation values(%s,%s,%s,%f,%f,%f,%f,%s,%s,%s,%s,%s,%f,%f,%f,%f,%f,%s,%s)""" % insert_values
+
+        # execute sql
+        insert_result = cur.execute(insert_statement)
+        conn.commit()
+        print(insert_result)
+
+
+    # close mysql connection
+    cur.close()
+    conn.close()
+
+    # unload DBF file
+    table.unload()
+
+# main
