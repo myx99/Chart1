@@ -19,28 +19,18 @@ import tushare as ts
 # print(d1)
 # print(d3)
 
-a = arange(9).reshape(3,3)
-b = 2 * a
+# a = arange(9).reshape(3,3)
+# b = 2 * a
 # c = np.hstack((a,b))
 # c = np.concatenate((a,b),axis=1)
 # c = vstack((a,b))
-c = row_stack((a,b))
-d = a.tolist()
+# c = row_stack((a,b))
+# d = a.tolist()
 # print(a)
 # print(b)
 # print(d)
 
-x, y = 1,2
-x += y
+# x, y = 1,2
+# x += y
 # print('taoma@huajingsec.com')
 
-temp_row_list = [0,1,2,]
-def replace_none_value(startpoint, endpoint, givenvalue):
-    for i in temp_row_list[startpoint:endpoint]:
-        if i is None:
-            temp_row_list[i.index()] = givenvalue
-
-
-replace_none_value(3, 7, 0.0)
-replace_none_value(12, 17, 0.0)
-replace_none_value(-1, '', 0)

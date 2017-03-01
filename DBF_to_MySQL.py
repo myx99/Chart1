@@ -1,18 +1,18 @@
 import pymysql
 from dbfread import DBF
 
+
 # define dbf to mysql function
-def dbf_to_mysql(filedate, filename):
+def dbf_to_mysql_ValuationFile(filename):
 
     # set mysql connection
     conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='Matao_2012', db='test', use_unicode=True, charset="utf8")
     cur = conn.cursor()
 
     # load dbf and insert to db
-    dbf_file = "D:\\data\\valuation\\%s\\%s.dbf" % filedate, filename
+    dbf_file = filename
+    product = dbf_file[-12:-4]
     table = DBF(filename=dbf_file, load=True, encoding="gb2312")
-    # product = dbf_file[-12:-4]
-    product = filename
 
     # get record
     for row in table.records:
@@ -68,12 +68,6 @@ def dbf_to_mysql(filedate, filename):
         conn.commit()
         print(insert_result)
 
-
     # close mysql connection
     cur.close()
     conn.close()
-
-    # unload DBF file
-    table.unload()
-
-# main
