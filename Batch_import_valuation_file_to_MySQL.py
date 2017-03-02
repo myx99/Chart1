@@ -1,6 +1,6 @@
 import os
 
-from Utilities.DBF_to_MySQL import dbf_to_mysql_ValuationFile
+from Utilities.DBF_to_MySQL_for_ValuationTable import dbf_to_mysql_ValuationFile
 
 dir = "D:\\data\\valuation\\"
 for parent,dirnames,filenames in os.walk(dir):
