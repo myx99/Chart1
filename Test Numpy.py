@@ -34,3 +34,10 @@ import tushare as ts
 # x += y
 # print('taoma@huajingsec.com')
 
+a = []
+x = '%s'
+for i in range(10):
+    a.append(x)
+print(a)
+a.replace("'",'')
+print(tuple(a))

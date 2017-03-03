@@ -28,6 +28,11 @@ def txt_to_mysql_FutureSettlementFile(filename, filetype):
 
         # add '' for strings (or can't be insert to db)
         for x in temp:
+            # if type(x) is type(0.0):
+            #     value = x
+            # elif type(x) is type(0):
+            #     value = float(x)
+            # else:
             value = "'%s'" % str(x).encode('utf-8').decode('utf-8')
             values.append(value)
         print(temp)
@@ -41,7 +46,9 @@ def txt_to_mysql_FutureSettlementFile(filename, filetype):
         elif filetype == "cuscode":
             insert_statement = """insert into Future_cuscode values(%s,%s,%s,%s,%s)""" % insert_values
         elif filetype == "cusfund":
-            insert_statement = """insert into Future_cusfund values(%s,%s,%s,%s,%s)""" % insert_values
+            insert_statement = """insert into Future_cusfund values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""" % insert_values
+        elif filetype == "trddata":
+            insert_statement = """insert into Future_trddata values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""" % insert_values
         else:
             print("filetype error....")
             break
@@ -52,3 +59,9 @@ def txt_to_mysql_FutureSettlementFile(filename, filetype):
     # close mysql connection
     cur.close()
     conn.close()
+
+
+# test main
+# f = "D:\\data\\future\\0158trddata20170209.txt"
+# ft = f.split('\\')[-1][4:-12]
+# txt_to_mysql_FutureSettlementFile(f, ft)
