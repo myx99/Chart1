@@ -49,7 +49,7 @@ df[column_name1] = pd.Series(sharpes_eq)
 df[column_name2] = pd.Series(sharpes_zb)
 df[column_name1] = df[column_name1].astype(float)
 df[column_name2] = df[column_name2].astype(float)
-print(df)
+# print(df)
 
 df = df.set_index('Date')
 df.plot()
