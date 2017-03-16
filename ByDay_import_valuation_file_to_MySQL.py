@@ -5,8 +5,8 @@ from Utilities.DBF_to_MySQL_for_ValuationTable import dbf_to_mysql_ValuationFile
 
 # import by single folder based on the designed date
 date = time.strftime("%Y%m%d")
-date = "20170228"
-dir = "D:\\data\\valuation\\" + date
+# date = "20170310"
+dir = "E:\\data\\gz\\" + date
 print(dir)
 for ps, ds, fs in os.walk(dir):
     for f in fs:
