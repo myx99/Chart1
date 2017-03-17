@@ -1,0 +1,318 @@
+
+/****************create table part***************/
+
+
+CREATE TABLE Daily_Risk_Report (
+  ID int(8) NOT NULL AUTO_INCREMENT,
+  Date_Time char(20) NOT NULL DEFAULT '',
+  REPORTER varchar(16) NOT NULL DEFAULT '',
+  ISSUES varchar(30) NOT NULL DEFAULT '',
+  SUMMARY varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE Valuation (
+  Occur_Date date NULL, # ffdate
+  Subject_Code char(64) NULL, # a0
+  Subject_Name char(128) NULL, # a1
+  Quantity float(16,2) NULL, # a2
+  Cost_Original_Currency float(16,2) NULL, # a3
+  Price_Original_Currency float(14,4) NULL, # a4
+  Market_Value_Original_Currency float(16,2) NULL, # a5
+  Invest_Type char(1) NULL, # a6
+  Market char(1) NULL, # a7
+  Liquidity char(1) NULL, # a8
+  Stock_ID char(20) NULL, # a9
+  Currency char(3) NULL, # a10
+  Exchange_Rate float(20,12) NULL, # a11
+  PnL_Original_Currency float(16,2) NULL, # a12
+  Cost_Domestic_Currency float(16,2) NULL, # a13
+  Price_Domestic_Currency float(14,4) NULL, # a14
+  Market_Domestic_Currency float(16,2) NULL, # a15
+  L_SFQR int(4)  NULL,  # L_SFQR
+  Product_ID char(10) NULL
+);
+
+
+CREATE TABLE Future_cusaccount (
+  Occur_Date date NOT NULL, # 日期
+  Customer_ID char(18) NOT NULL, # 客户号
+  Bank_ID char(2) NOT NULL, # 银行统一标识
+  Bank_Account char(22) NOT NULL, # 银行账户
+  Account_Status char(1) NOT NULL, # 新增或变更标志
+  Band_Account_Name TEXT NULL, # 银行账户名称
+  Band_Branch_Office TEXT NULL, # 开户行
+  Currency char(3) NOT NULL, # 币种
+  Account_Type char(1) NOT NULL, # 账户类型
+  Broker_ID char(6) NOT NULL  # 期货经纪商
+);
+
+
+CREATE TABLE Future_cuscode (
+  Occur_Date date NOT NULL, # 日期
+  Customer_ID char(18) NOT NULL, # 客户号
+  Exchange_ID char(1) NOT NULL, # 交易所
+  Investor_ID char(8) NOT NULL, # 交易编码
+  Broker_ID char(6) NOT NULL  # 期货经纪商
+);
+
+
+CREATE TABLE Future_cusfund (
+  Occur_Date date NOT NULL, # 日期
+  Customer_ID char(18) NOT NULL, # 客户号
+  Total_Equity float(15,3) NOT NULL, # 资金权益总额
+  Usable_Fund float(15,3) NOT NULL, # 可用资金
+  Collateral_Required float(15,3) NOT NULL, # 需追加保证金
+  Risk_Rate float(15,3) NOT NULL, # 风险度
+  Last_Balance_market2market float(15,3) NOT NULL, # 上日结存（逐日盯市）
+  Last_Balance_trade2trade float(15,3) NULL, # 上日结存（逐笔对冲）
+  Today_Balance_market2market float(15,3) NOT NULL, # 当日结存（逐日盯市）
+  Today_Balance_trade2trade float(15,3) NULL, # 当日结存（逐笔对冲）
+  Today_PnL_market2market float(15,3) NOT NULL, # 当日总盈亏（逐日盯市）
+  Today_PnL_trade2trade float(15,3) NULL, # 当日总盈亏（逐笔对冲）
+  Floating_PnL_trade2trade float(15,3) NULL, # 浮动盈亏
+  NonFund_ChargeAgainst float(15,3) NOT NULL, # 非货币冲抵金额
+  If_Member char(1) NOT NULL, # 是否为交易会员
+  Currency char(3) NOT NULL, # 币种
+  Cash_Amout float (15,3) NOT NULL, # 实有货币资金
+  Cash_ChargeAgainst float (15,3) NOT NULL, # 货币冲抵金额
+  Cash_Pledge float (15,3) NOT NULL, # 其他货币质出金额
+  Cash_Pledge_Collateral float (15,3) NOT NULL, # 货币质押保证金占用
+  Today_Premium float (15,3) NOT NULL, # 当日总权利金
+  Broker_ID char(6) NOT NULL  # 期货经纪商
+);
+
+
+CREATE TABLE Future_trddata (
+  Occur_Date date NOT NULL, # 日期
+  Customer_ID char(18) NOT NULL, # 客户号
+  Knock_Serial char(16) NOT NULL, # 成交流水号
+  Contract char(30) NOT NULL, # 品种合约
+  Buy_Sell char(1) NOT NULL, # 买卖标志
+  Knock_Qty int(10) NOT NULL, # 成交量
+  Knock_Price float(15,3) NOT NULL, # 成交价
+  Knock_Amt float(15,3) NOT NULL, # 成交额
+  Knock_Time time NOT NULL, # 成交时间
+  Open_Close char(1) NOT NULL, # 开平仓标志
+  Trade_Type char(1) NOT NULL, # 投机、套保、套利标志
+  Close_PnL_market2market float(15,3) NOT NULL, # 平仓盈亏（逐日盯市）
+  Close_PnL_trade2trade float(15,3) NULL, # 平仓盈亏（逐笔对冲）
+  Commission_Fee float(15,3) NOT NULL, # 手续费
+  Investor_ID char(10) NOT NULL, # 交易编码
+  Exchange_ID char(1) NOT NULL, # 交易所
+  If_Member char(1) NOT NULL, # 是否为交易会员
+  Exch_Order_Num char(12) NOT NULL, # 报单号
+  Seat_ID char(15) NOT NULL, # 席位号
+  Currency char(3) NOT NULL, # 币种
+  Knock_Date date NOT NULL, # 成交日期
+  Broker_ID char(6) NOT NULL  # 期货经纪商
+);
+
+
+CREATE TABLE Daily_Risk_Analysis (
+  Occur_Date date NOT NULL, # 日期
+  Product_ID char(10) NOT NULL, # 产品号
+  Nav float(14,4) NULL, # 单位净值
+  Nav_Day_Increase float(14,6) NULL, # 净值日增长率
+  Annualized_Return float(14,6) NULL, # 年化收益率
+  Benchmark_Return1 float(14,6) NULL, # 无风险收益率1
+  Benchmark_Return2 float(14,6) NULL, # 无风险收益率2
+  Alpha float(14,6) NULL,
+  Beta float(14,6) NULL,
+  Sharpe_Ratio float(14,6) NULL,
+  Volatility float(14,6) NULL,
+  Information_Ratio float(14,6) NULL,
+  MAX_Drawdown float(14,6) NULL,
+  MAX_Drawdown_Start_Date date NULL,
+  MAX_Drawdown_End_Date date NULL
+);
+
+/****************other table management part***************/
+/*
+Hot Keys：
+1. execute all or selection  ---  ctrl + shift + enter
+2. execute current line  ---  ctrl + enter
+3. comment line  ---  "-- "
+4. execute all  ---  ctrl + shift + enter
+5. format sql statement  ---  ctrl + b
+6. call out explain  ---  ctrl + shift + x
+*/
+
+# ------------------------------------------------------- #
+
+select * from Daily_Risk_Analysis;
+
+alter table Daily_Risk_Analysis add column MAX_Drawdown_Start_Date date;
+
+alter table Daily_Risk_Analysis add column MAX_Drawdown_End_Date date;
+
+
+
+# ------------------------------------------------------- #
+select * from Future_trddata;
+
+select * from Future_trddata where Occur_Date = '2017-03-16';
+
+-- truncate table Future_trddata;
+
+-- drop table Future_trddata;
+
+select count(*) from Future_trddata;  # 1028
+
+
+select if (a.c > 1100, a.c, 'ok') from (select count(*) as c from Future_trddata group by Occur_Date) a;
+
+-- start a query --
+select Buy_Sell, Knock_Qty, Knock_Price, Knock_Amt, Open_Close, Close_PnL_market2market, Close_PnL_trade2trade, Commission_Fee from Future_trddata
+where Occur_Date > '2017-01-31' and Occur_Date < '2017-03-01'
+and Customer_ID = '180200060'
+and Contract = 'CF705'
+and Open_Close = 'L'
+;
+
+
+
+select Contract, sum(Knock_Qty) as '总平仓手数', sum(Knock_Amt) as '平仓总成交金额',
+	   sum(Close_PnL_market2market) as '平仓总盈亏（逐日盯市）', sum(Close_PnL_trade2trade) as '平仓总盈亏（逐笔对冲）',
+       sum(Commission_Fee) as '平仓手续费总计'
+       from Future_trddata
+where Occur_Date > '2017-01-31' and Occur_Date < '2017-03-01'
+and Customer_ID = '180200060'
+and Contract = 'CF705'
+and Open_Close = 'L'
+;
+
+
+
+# ------------------------------------------------------- #
+select * from Future_cusfund where Occur_Date = '2017-03-16';
+
+-- truncate table Future_cusfund;
+
+
+select if (a.c > 2, a.c, 'ok') from (select count(*) as c from Future_cusfund group by Occur_Date) a;
+
+
+
+# ------------------------------------------------------- #
+select * from Future_cuscode where Occur_Date = '2017-03-16';
+
+select count(*) from Future_cuscode group by Occur_Date;
+
+select if (a.c > 10, a.c, 'ok') from (select count(*) as c from Future_cuscode group by Occur_Date) a;
+
+-- truncate table Future_cuscode;
+
+# ------------------------------------------------------- #
+select * from Future_cusaccount where Occur_Date = '2017-03-16';
+
+select if (a.x>2, a.x, 'ok') from (select count(*) as x from Future_cusaccount group by Occur_Date ) a;
+
+
+-- drop table Future_cusaccount;
+
+-- truncate table Future_cusaccount;
+
+# ------------------------------------------------------- #
+select * from daily_risk_report where Occur_Date = '2017-03-16';
+
+-- insert into daily_risk_report values (1,'2017-02-15','马涛','No','Fine without issue');
+
+# ------------------------------------------------------- #
+
+select * from Valuation where Occur_Date = '2017-03-16';
+
+select Subject_Code, Subject_Name,  from Valuation
+where Occur_Date = '2017-03-15'
+
+
+
+select count(*) from Valuation where Occur_Date = '2017-02-25';
+
+select count(*) from Valuation where Occur_Date = '2017-02-28' and Product_ID = 'GZFB0002';
+
+# check if duplicate
+select if(a.count>400, a.count, 'ok') from  (select count(*) as count from Valuation group by Occur_Date) a;
+
+
+select Quantity from Valuation
+where Subject_Code = '实收资本'
+-- and Product_ID = 'GZFB0002'
+group by Product_ID
+order by Occur_Date;
+
+select 83-61;
+select 108-87;
+
+
+-- delete from Valuation where Occur_Date = '2017-02-28';
+
+order by Occur_Date
+where Product_ID = 'GZFB0002' AND Occur_Date > '2017-02-01' and Occur_Date < '2017-02-26' order by Occur_Date ;
+
+
+select Occur_Date as '日期', Subject_Name as '净值日增长率(%)' from Valuation
+where Product_ID = 'GZFB0001'
+and Occur_Date > '2017-01-31' and Occur_Date < '2017-03-01'
+and Subject_Code = '净值日增长率(%):'
+order by Occur_Date ;
+
+
+select Occur_Date as 'Date', Subject_Name as 'NAV_Increase' from Valuation
+where Product_ID = 'GZFB0001'
+and Occur_Date >= '2017-01-19' and Occur_Date <= '2017-02-28'
+and Subject_Code = '净值日增长率(%):'
+order by Occur_Date;
+
+
+
+select Occur_Date as 'Date', Subject_Name as 'Accumulative NAV' from Valuation
+where Product_ID = 'GZFB0001'
+and Occur_Date >= '2017-01-18' and Occur_Date <= '2017-02-28'
+and Subject_Code = '累计单位净值:'
+order by Occur_Date;
+
+
+
+select a.Cost_Original_Currency from
+(
+select Subject_Code, Subject_Name, Cost_Original_Currency from Valuation
+where Product_ID = 'GZFB0001'
+and Occur_Date = '2017-01-18'
+and Subject_Code like '1204%'
+limit 3,1
+) a ;
+
+
+-- delete from Valuation where Occur_Date = '2017-02-25';
+
+-- drop table Valuation;
+
+-- alter table Valuation add column Product_ID char(10);
+
+--
+-- truncate table Valuation;
+
+
+-- insert into Valuation values (2017-02-22, # ffdate
+							  1002,  # a0
+							  '银行存款',  # a1
+                              0.000000, # a2
+                              69377233.340000, # a3
+                              0.000000, # a4
+                              69377233.340000, # a5
+                              '', # a6
+                              '', # a7
+                              '', # a8
+                              '', # a9
+                              '', # a10
+                              0.000000, # a11
+                              0.000000, # a12
+                              69377233.340000, # a13
+                              0.000000, # a14
+                              69377233.340000, #a15
+                              1); #L_sfqr
+
+
+-- insert into Valuation values('2017-02-22','1002','银行存款',0.000000,69377233.340000,0.000000,69377233.340000,'','','','','',0.000000,0.000000,69377233.340000,0.000000,69377233.340000,'1')

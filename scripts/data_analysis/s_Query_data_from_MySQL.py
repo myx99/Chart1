@@ -9,11 +9,7 @@ def Query_MySQL(fund_id, startdate, enddate):
 
     # compile sql statement
     # This is to get the NAV increase rate from db and calculate SHARPE value
-    select_statement = "select Occur_Date as 'Date', Subject_Name as 'NAV_Increase' from Valuation " \
-                       "where Product_ID = '%s' " \
-                       "and Occur_Date >= '%s' and Occur_Date <= '%s' " \
-                       "and Subject_Code = '净值日增长率(%s):' " \
-                       "order by Occur_Date" % (fund_id, startdate, enddate, '%')
+    select_statement = """select Occur_Date as 'Date', Subject_Name as 'NAV_Increase' from Valuation where Product_ID = '%s' and Occur_Date >= '%s' and Occur_Date <= '%s' and Subject_Code = '净值日增长率(%s):' order by Occur_Date""" % (fund_id, startdate, enddate, '%')
     # print(select_statement)  # DEBUG
 
     # use pandas to get the sql result
