@@ -55,6 +55,7 @@ def Cal_Benchmark_Rate(bond, startdate, enddate):
     # print(brr_yearly, brr_daily)  # DEBUG
     return brr_daily
 
+
 # formula to calculate sharpe value
 def sharpe_formula(mean_value, std_value, bmr):
     if std_value == 0:
@@ -65,6 +66,3 @@ def sharpe_formula(mean_value, std_value, bmr):
 # test main
 # x = Cal_Sharpe('GZFB0001', '2017-01-19', '2017-02-28')
 # print(x)
-
-
-Cal_Benchmark_Rate()
