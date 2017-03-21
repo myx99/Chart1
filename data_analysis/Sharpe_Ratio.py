@@ -2,12 +2,15 @@ from WindPy import *
 import pandas as pd
 import matplotlib.pyplot as plt
 from Utilities.Query_data_from_MySQL import Query_MySQL
+from data_analysis.DB_query import db_query
+
 import numpy as np
 
 
 def Cal_Sharpe(product_id, startdate, enddate, product_type=None):
     # get nav increase data by day
-    df = Query_MySQL(product_id, startdate, enddate)
+    # df = Query_MySQL(product_id, startdate, enddate)
+    df = db_query(product_id, startdate, enddate, "nav_increase")
     # print(df.dtypes)  # DEBUG
 
     # format data, column 1 = Date, Column 2 = NAV_Increase
@@ -58,8 +61,8 @@ def Cal_Benchmark_Rate(bond, startdate, enddate):
 
 # formula to calculate sharpe value
 def sharpe_formula(mean_value, std_value, bmr):
-    if std_value == 0:
-        return 100
+    # if std_value == 0:
+    #     return 100
     return ((mean_value - bmr) / std_value) * np.sqrt(250)
 
 

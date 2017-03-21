@@ -62,4 +62,4 @@ def ftp_to_local_gz(tag=None):
 
 
 # Main
-ftp_to_local_gz()
+ftp_to_local_gz("20170317")

@@ -57,4 +57,4 @@ def ftp_to_local_ft(tag=None):
 
 
 # Main
-ftp_to_local_ft()
+ftp_to_local_ft("20170317")
