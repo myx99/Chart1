@@ -6,7 +6,7 @@ from data_analysis.DB_query import db_query
 import numpy as np
 
 
-def cal_beta(product_id, startdate, enddate):
+def cal_info_rate(product_id, startdate, enddate):
     # get nav increase data by day
     df = db_query(product_id, startdate, enddate, "nav_increase")
 
@@ -31,10 +31,13 @@ def cal_beta(product_id, startdate, enddate):
     df_temp = pd.merge(df_bm, df, how='left', on='Date')
     # df_temp = df_temp.fillna(0)
 
-    bt = df_temp['NAV_Increase'].cov(df_temp['Benchmark']) / df_temp['Benchmark'].var()
+    df_temp['diff'] = df_temp['NAV_Increase'] - (df_temp['Benchmark'] / 365)
+    annual_mean = df_temp['diff'].mean() * 250
+    annual_std = df_temp['diff'].std() * np.sqrt(250)
+    info = annual_mean / annual_std
 
-    return "%.4f" % bt
+    return "%.4f" % info
 
 # test main
-# result = cal_beta('GZFB0001', '2017-01-18', '2017-01-19')
+# result = cal_info_rate('GZFB0001', '2017-01-18', '2017-02-19')
 # print(result)

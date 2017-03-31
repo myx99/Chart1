@@ -52,7 +52,7 @@ def Cal_Benchmark_Rate(bond, startdate, enddate):
     # print(data)  # DEBUG
     brr = data.Data[0]
     brr_yearly = np.mean(brr)
-    brr_daily = brr_yearly / 360
+    brr_daily = brr_yearly / 365
     w.close
     # print(brr)  # DEBUG
     # print(brr_yearly, brr_daily)  # DEBUG

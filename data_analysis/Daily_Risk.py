@@ -8,49 +8,50 @@ from data_analysis.Average_Increase import average_increase
 from data_analysis.Probability_of_UP import probs_up
 from data_analysis.Volatility import volatility
 from data_analysis.cal_beta import cal_beta
+from data_analysis.cal_info_rate import cal_info_rate
+from data_analysis.DB_insert import db_insert
 
 
 # date
 startdate_nav = '2017-01-18'
-startdate_nav_increase = '2017-01-19'
-startdate_sharpe = '2017-01-23'
-enddate = '2017-02-28'
+# startdate_nav_increase = '2017-01-19'
+# startdate_sharpe = '2017-01-23'
+# startdate_nav = '2017-01-23'
+# startdate_nav_increase = '2017-01-23'
+# startdate_sharpe = '2017-01-23'
+enddate = '2017-01-31'
+
+# benchmark code
+bmc = "CGB10Y.WI"
 
 # product
 product = 'GZFB0001'
 
 #--------------- manage risk table ----------------#
-# ----> date, nav and nav_increase
+# ----> | date | nav | nav_increase |
 df_nav = db_query(product, startdate_nav, enddate, "nav")
-# print(df_nav)
-
-df_nav_increase = db_query(product, startdate_nav_increase, enddate, "nav_increase")
-# print(df_nav_increase)
-
+df_nav_increase = db_query(product, startdate_nav, enddate, "nav_increase")
 # print(df_nav)
 # print(df_nav_increase)
-
 df_temp = pd.merge(df_nav, df_nav_increase, how='outer')
 # print(df_temp)
 
-# -----> benchmark
+# -----> | date | nav | nav_increase | benchmark |
 w.start()
-bmk_wind_data1 = w.wsd("M1001654", "close", startdate_nav, enddate, "Fill=Previous")
+bmk_wind_data1 = w.wsd(bmc, "close", startdate_nav, enddate, "")
 w.close()
+# print(bmk_wind_data1.Data[0])
 df_temp['Benchmark'] = bmk_wind_data1.Data[0]
-
-# -----> product
+# print(df_temp)
+# -----> | date | nav | nav_increase | benchmark | product
 df_temp['Product_ID'] = product
 
-# NaN --> 0
-df_temp = df_temp.fillna(0)
+# -----> fill NaN with 0
+# df_temp = df_temp.fillna(0)
 
-# -----> beta
-# df_temp['Beta'] = df_temp['NAV_Increase'].astype(float).cov(df_temp['Benchmark'].astype(float)) / df_temp['Benchmark'].astype(float).var()
+# print(df_temp)
 
-print(df_temp)
-
-# -----> average increase, annualized return, sharpe, maxdrawdown
+# -----> | date | nav | nav_increase | benchmark | product | Average_Increase | Probability of UP | Annualized_Return | Sharpe | Volatility | Beta | Info_Rate | Max_Drawdown_Rate | Max_Drawdown_StartDate | Max_Drawdown_EndDate
 w.start()
 date_list = w.tdays(startdate_nav, enddate, "").Times
 w.close()
@@ -70,6 +71,8 @@ by_day_sharpe = []
 by_day_vol = []
 # beta
 by_day_beta = []
+# info rate
+by_day_info_rate = []
 # mdd
 by_day_maxDrawdown_rate = []
 by_day_maxDrawdown_startdate = []
@@ -97,6 +100,9 @@ for i in range(1, date_count+1):
     # beta
     bt = cal_beta(product, startdate_nav, x)
     by_day_beta.append(bt)
+    # info rate
+    info = cal_info_rate(product, startdate_nav, x)
+    by_day_info_rate.append(info)
     # mdd
     mdd = Cal_MaxDrawdown(product, startdate_nav, x)
     by_day_maxDrawdown_rate.append(mdd[0])
@@ -104,42 +110,30 @@ for i in range(1, date_count+1):
     by_day_maxDrawdown_enddate.append(mdd[2])
 
 # ave
-df_temp["Average_Increase"] = pd.Series(by_day_average_increase)
+df_temp["Average Increase"] = pd.Series(by_day_average_increase)
 # probs up
 df_temp["Probability of UP"] = pd.Series(by_day_probs_up)
 # an
-df_temp["Annualized_Return"] = pd.Series(by_day_annualized_return)
+df_temp["Annualized Return"] = pd.Series(by_day_annualized_return)
 # sp
 df_temp["Sharpe"] = pd.Series(by_day_sharpe)
 # vol
 df_temp["Volatility"] = pd.Series(by_day_vol)
 # beta
 df_temp["Beta"] = pd.Series(by_day_beta)
+# info rate
+df_temp["Info Rate"] = pd.Series(by_day_info_rate)
 # mdd
-df_temp["Max_Drawdown_Rate"] = pd.Series(by_day_maxDrawdown_rate)
-df_temp["Max_Drawdown_StartDate"] = pd.Series(by_day_maxDrawdown_startdate)
-df_temp["Max_Drawdown_EndDate"] = pd.Series(by_day_maxDrawdown_enddate)
+df_temp["Max Drawdown Rate"] = pd.Series(by_day_maxDrawdown_rate)
+df_temp["Max Drawdown StartDate"] = pd.Series(by_day_maxDrawdown_startdate)
+df_temp["Max Drawdown EndDate"] = pd.Series(by_day_maxDrawdown_enddate)
 
 print(df_temp)
 
+# process NaN inf nan
+# df_temp = df_temp.replace(float('inf'), 0)
+# df_temp = df_temp.replace(float('nan'), 0)
+df_temp = df_temp.fillna('Null')
+print(df_temp)
 
-#--------------- Sharpe ----------------#
-# today = time.strftime("%Y%m%d")
-# today = "2017-03-10"
-#
-# product_list = ['GZFB0001', 'GZFB0002']
-#
-# # print("The risk data of today ( %s ) is as below: " % today)
-# for product in product_list:
-#     Daily_Sharpe_Value = Cal_Sharpe(product, '2017-01-19', today)
-#     print("Sharpe value of product: "
-#           "%s  is  %.4f  ( Rf = 10Y Treasury Bond return )"
-#           % (product, Daily_Sharpe_Value))
-#
-# for product in product_list:
-#     Daily_Sharpe_Value = Cal_Sharpe(product, '2017-01-19', today, "ZB")
-#     print("Sharpe value of product: "
-#           "%s  is  %.4f  ( Rf = 0 )"
-#           % (product, Daily_Sharpe_Value))
-
-
+db_insert(df_temp, 'daily_risk_cal')
