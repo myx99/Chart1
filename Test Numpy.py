@@ -1,43 +1,26 @@
+# import time
 # import numpy as np
-from numpy import *
-import tushare as ts
-
-# print(ts.get_hist_data('600848'))
-
-# raw_data1 = [1,2,3]
-# raw_data2 = [0.2, 1.5, 3.6]
-# data = np.array([raw_data1, raw_data2])
-# print(data)
-# print(data.shape)
-# print(data.dtype)
-#print(data * 0.2)
-
-# d = np.arange(24)
-# d1 = d.reshape(2,3,4)
-# d1.shape = (6,4)
-# d3 = d1.transpose()
-# print(d1)
-# print(d3)
-
-# a = arange(9).reshape(3,3)
-# b = 2 * a
-# c = np.hstack((a,b))
-# c = np.concatenate((a,b),axis=1)
-# c = vstack((a,b))
-# c = row_stack((a,b))
-# d = a.tolist()
-# print(a)
+# import random
+#
+# a = []
+# for i in range(10):
+#     a.append(i)
+# b = random.randint(10, 120)
 # print(b)
-# print(d)
+# print("count down")
+# time.sleep(b)
+# print(a)
 
-# x, y = 1,2
-# x += y
-# print('taoma@huajingsec.com')
+x = 1.0255
+y = 1.0318
 
-a = []
-x = '%s'
-for i in range(10):
-    a.append(x)
-print(a)
-a.replace("'",'')
-print(tuple(a))
+m = 200000
+roe = m * ((y-x)/x)
+shares = 195026.82
+roe2 = shares * y - m
+
+check = roe - roe2
+fee = (roe + m)*0.02
+
+
+print(roe, roe2, check)

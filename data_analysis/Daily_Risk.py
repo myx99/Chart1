@@ -19,13 +19,14 @@ startdate_nav = '2017-01-18'
 # startdate_nav = '2017-01-23'
 # startdate_nav_increase = '2017-01-23'
 # startdate_sharpe = '2017-01-23'
-enddate = '2017-01-31'
+enddate = '2017-04-05'
 
 # benchmark code
 bmc = "CGB10Y.WI"
 
 # product
-product = 'GZFB0001'
+product = 'GZFB0002'
+
 
 #--------------- manage risk table ----------------#
 # ----> | date | nav | nav_increase |
@@ -125,15 +126,17 @@ df_temp["Beta"] = pd.Series(by_day_beta)
 df_temp["Info Rate"] = pd.Series(by_day_info_rate)
 # mdd
 df_temp["Max Drawdown Rate"] = pd.Series(by_day_maxDrawdown_rate)
-df_temp["Max Drawdown StartDate"] = pd.Series(by_day_maxDrawdown_startdate)
-df_temp["Max Drawdown EndDate"] = pd.Series(by_day_maxDrawdown_enddate)
+df_temp["Max Drawdown Start Date"] = pd.Series(by_day_maxDrawdown_startdate)
+df_temp["Max Drawdown End Date"] = pd.Series(by_day_maxDrawdown_enddate)
 
-print(df_temp)
+# print(df_temp)
 
 # process NaN inf nan
-# df_temp = df_temp.replace(float('inf'), 0)
-# df_temp = df_temp.replace(float('nan'), 0)
-df_temp = df_temp.fillna('Null')
-print(df_temp)
+df_temp = df_temp.replace(float('inf'), '')    # inf
+# df_temp = df_temp.replace(float('nan'), 'null')
+df_temp = df_temp.replace('nan', '')    #  nan
+df_temp = df_temp.replace('NaN', '')    # NaN (str)
+df_temp = df_temp.fillna('')    # NaN (float)
+# print(df_temp)
 
 db_insert(df_temp, 'daily_risk_cal')
