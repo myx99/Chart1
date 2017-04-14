@@ -18,24 +18,39 @@ df = pd.read_sql(sql=statement, con=conn)
 
 # fill null with 0
 df = df.replace('', 0)
-# df = df.replace(460.3235, 0)
+# print(df)
 
-print(df)
+# format dtype and expand to 3 charts based on the value range:
+df_1 = pd.DataFrame()
+df_1['Date'] = df['Date'].astype(date)
+df_1['Sharpe'] = df['Sharpe'].astype(float)
+df_1['Volatility'] = df['Volatility'].astype(float)
+df_1['Info Rate'] = df['Info Rate'].astype(float)
 
-# format dtype
-df['Date'] = df['Date'].astype(date)
-df['NAV'] = df['NAV'].astype(float)
-df['NAV_Increase'] = df['NAV_Increase'].astype(float)
-df['Benchmark'] = df['Benchmark'].astype(float)
-df['Average Increase'] = df['Average Increase'].astype(float)
-df['Probability of UP'] = df['Probability of UP'].astype(float)
-df['Annualized Return'] = df['Annualized Return'].astype(float)
-df['Sharpe'] = df['Sharpe'].astype(float)
-df['Volatility'] = df['Volatility'].astype(float)
-df['Beta'] = df['Beta'].astype(float)
-# df['Info Rate'] = df['Info Rate'].astype(float)
-df['Max Drawdown Rate'] = df['Max Drawdown Rate'].astype(float)
+df_2 = pd.DataFrame()
+df_2['Date'] = df['Date'].astype(date)
+df_2['Benchmark'] = df['Benchmark'].astype(float)
+df_2['Average Increase'] = df['Average Increase'].astype(float) * 100
+df_2['Annualized Return'] = df['Annualized Return'].astype(float) * 100
 
-df = df.set_index('Date')
-df.plot()
+df_3 = pd.DataFrame()
+df_3['Date'] = df['Date'].astype(date)
+df_3['NAV_Increase'] = df['NAV_Increase'].astype(float) * 100
+df_3['Probability of UP'] = df['Probability of UP'].astype(float) * 100
+
+df_4 = pd.DataFrame()
+df_4['Date'] = df['Date'].astype(date)
+df_4['NAV'] = df['NAV'].astype(float)
+df_4['Beta'] = df['Beta'].astype(float)
+df_4['Max Drawdown Rate'] = df['Max Drawdown Rate'].astype(float)
+
+df_1 = df_1.set_index('Date')
+df_2 = df_2.set_index('Date')
+df_3 = df_3.set_index('Date')
+df_4 = df_4.set_index('Date')
+
+df_1.plot()
+df_2.plot()
+df_3.plot()
+df_4.plot()
 plt.show()
