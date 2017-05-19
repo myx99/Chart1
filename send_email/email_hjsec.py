@@ -62,7 +62,7 @@ def sendemail_hjsec(to_addr_list, subject, body, attachmentFilePath):
     svr.close()
 
 # Get date
-date = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
 
 # log file
 log_file_name = "D:\\temp\\email_%s.log" % date
