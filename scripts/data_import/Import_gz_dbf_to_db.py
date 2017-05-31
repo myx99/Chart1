@@ -43,7 +43,7 @@ def dbf_to_mysql_ValuationFile(filename):
         def replace_none_value(list, startpoint, endpoint, givenvalue):
             s = int(startpoint)
             if endpoint == 'null':  # single item
-                if list[s] ==  "'None'":
+                if list[s] == "'None'":
                     list[s] = givenvalue
                 return list
             else:
@@ -77,6 +77,7 @@ def dbf_to_mysql_ValuationFile(filename):
 # main
 # import by single folder based on the designed date
 date = time.strftime("%Y%m%d")
+date = "20170526"
 dir = "E:\\data\\gz\\" + date
 for ps, ds, fs in os.walk(dir):
     for f in fs:

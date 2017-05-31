@@ -1,0 +1,19 @@
+## Transfer gz dbf files from share drive to ftp folder ##
+## Amendment is "adding new product ID" ##
+upload_gz_files.py
+
+## Transfer gz dbf files from ftp folder to PC host of internet accessible LAN ##
+## Amendment is "adding new product ID" ##
+download_gz_files.py
+
+## Import DBF files to MySQL database, table name is "Valuation" ##
+## No amendment is required ##
+Import_gz_dbf_to_db.py
+
+## Data analysis based on table "Valuation" and import to "daily_risk_cal" ##
+## Amendment includes adding product id and setting up the product start date ##
+Daily_Risk_byday.py
+
+## Data charting based on table "daily_risk_cal" ##
+## Amendment is "adding new product ID" ##
+Daily_Risk_Charts.py

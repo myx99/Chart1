@@ -30,7 +30,11 @@ def cal_risk_all(p, d, b):
     df_temp['Product_ID'] = p
     # print(df_temp)
 
-    startdate_nav = '2017-01-18'
+    if p in ['GZFB0001', 'GZFB0002']:
+        startdate_nav = '2017-01-18'
+    elif p == 'GZFB0003':
+        startdate_nav = '2017-05-26'
+
     # ave
     df_temp["Average Increase"] = average_increase(p, startdate_nav, d)
     # probs up
@@ -64,8 +68,8 @@ def cal_risk_all(p, d, b):
 
 # test main
 # given_date = time.strftime("%Y-%m-%d")
-given_date = '2017-04-06'
+given_date = '2017-05-26'
 bmc = "CGB10Y.WI"
-product_group = ['GZFB0001', 'GZFB0002']
+product_group = ['GZFB0001', 'GZFB0002', 'GZFB0003']
 for product in product_group:
     cal_risk_all(product, given_date, bmc)

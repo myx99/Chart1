@@ -44,8 +44,9 @@ def ftp_to_local_gz(tag=None):
     # target file list
     product1 = "GZFB0001.dbf"
     product2 = "GZFB0002.dbf"
+    product3 = "GZFB0003.dbf"
     nav_file = "NAV" + "%s" % date
-    file_list = [product1, product2, nav_file]
+    file_list = [product1, product2, product3, nav_file]
 
     # file transfer
     bufsize = 1024
@@ -62,4 +63,5 @@ def ftp_to_local_gz(tag=None):
 
 
 # Main
-ftp_to_local_gz("20170317")
+ftp_to_local_gz("20170526")
+
