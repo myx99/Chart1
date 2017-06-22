@@ -1,21 +1,43 @@
-import ConfigParser
+import configparser
 
 
+# Public Configurations
+config_path = "..\\Configs\\"
+configfile = "config.ini"
+path = config_path + configfile
+# print(path)
 
-class GlobalConfig:
-    def conn_list(self, matao_pc):
-        host = '127.0.0.1'
-        port = 3306
-        user = 'root'
-        passwd = 'Matao_2012'
-        db = 'test'
-        use_unicode = True
-        charset = "utf8"
-        return [host, port, user, passwd, db, use_unicode, charset]
+
+class GlobalConfig(object):
+
+    def __init__(self):
+        # print("Loaded config file")
+        self.cp = configparser.ConfigParser()
+        self.cp.read(path)
+
+    def getConfig(self, section, key):
+        # print("Retrieved string type configurations")
+        return self.cp.get(section, key)
+
+    def getIntConfig(self, section, key):
+        # print("Retrieved int type configurations")
+        return self.cp.getint(section, key)
+
+    def getBooleanConfig(self, section, key):
+        # print("Retrieved boolean type configurations")
+        return self.cp.getboolean(section, key)
+
 
 if __name__ == '__main__':
     m = GlobalConfig()
-    m.conn_list(matao_pc)
+    host = m.getConfig('mysql', 'host')
+    port = m.getIntConfig("mysql", "port")
+    user = m.getConfig("mysql", "user")
+    password = m.getConfig("mysql", "passwd")
+    dbname = m.getConfig("mysql", "db")
+    unicode = m.getBooleanConfig("mysql", "use_unicode")
+    charset = m.getConfig("mysql", "charset")
+    print(host, port, user, password, dbname, unicode, charset)
 
 
 
