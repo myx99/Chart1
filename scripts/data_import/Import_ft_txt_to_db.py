@@ -65,7 +65,7 @@ def txt_to_mysql_FutureSettlementFile(filename, filetype):
 
 # main
 date = time.strftime("%Y%m%d")
-# date = "20170310"
+date = "20170626"
 path = "E:\\data\\gzouter\\%s\\" % date
 
 filetype_list = ["cusaccount", "cuscode", "cusfund", "trddata"]

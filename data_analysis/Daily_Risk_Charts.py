@@ -39,7 +39,7 @@ def risk_charting(product_id, factor):
     df_temp.plot(kind='bar', grid='on', figsize=(20, 10), title=chartname.upper())
 
     getdate = time.strftime("%Y-%m-%d")
-    getdate = "2017-05-26"
+    getdate = "2017-07-05"
     folder_path = "E:/风控合规/风险计量/%s/" % getdate
     file_name = product_id + "_" + factor + ".png"
     file_path = folder_path + file_name
@@ -53,7 +53,7 @@ def risk_charting(product_id, factor):
 
 
 # main
-id_list = ['GZFB0001', 'GZFB0002', 'GZFB0003']
+id_list = ['GZFB0001', 'GZFB0002', 'GZFB0003', 'GZFB0004']
 factor_list = ['Sharpe', 'Volatility', 'Info Rate', 'Benchmark', 'Average Increase', 'Annualized Return', 'NAV_Increase',
                'Probability of UP', 'NAV', 'Beta', 'Max Drawdown Rate']
 for pid in id_list:
