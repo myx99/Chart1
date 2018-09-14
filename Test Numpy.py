@@ -117,24 +117,36 @@ from WindPy import *
 import numpy as np
 
 
-w.start()
-turnover = w.wsd("600487.SH", "free_turn", "ED-19TD", "2017-11-17", "")
-data = turnover.Data[0]
-turnover_20_avg = '%.2f' % np.average(data)
-# print(turnover_20_avg)
+# w.start()
+#
+# x = w.wsd("000746.OF", "nav", "2017-01-01", "2017-11-30", "Currency=CNY")
 
-tradableshares_temp = w.wsd("600487.SH", "free_float_shares", "2017-10-31", "2017-10-31", "unit=1")
-tradableshares = '%.2f' % tradableshares_temp.Data[0][0]
-# print(tradableshares)
+import pandas as pd
 
-amt_temp = w.wsd("600487.SH", "amt", "ED-20D", "2017-11-17", "")
-amt = amt_temp.Data[0]
 
-amt_decrease = np.diff(amt) / amt[:-1]
-amtdecrease_20_avg = '%.2f' % np.average(amt_decrease)
-# print(amtdecrease_20_avg)
+df = pd.read_excel('C:/Users/taoma/Documents/行研/echarts/test1.xlsx')
+print(df)
 
-result_temp = float(turnover_20_avg) * float(tradableshares) * 0.0005 * 0.9
-# result_temp = float(turnover_20_avg) * float(tradableshares) * 0.0005 * (1 - float(amtdecrease_20_avg))
-result = '%.2f' % result_temp
-print(result)
+columns = df.columns
+index = df.index
+
+columns_count = len(columns)
+index_count = len(index)
+
+# print(columns_count, columns, index_count, index)
+
+array = []
+array_origin = []
+for i in range(index_count):
+    for j in range(columns_count):
+        cell_origin = df.iloc[i, j]
+        cell_reform = cell_origin.astype(float) / 700
+        cell_result = '%.0f' % cell_reform
+        cell1 = [i, j, cell_result]
+        cell2 = [i, j, cell_origin]
+        array.append(cell1)
+        array_origin.append(cell2)
+print('array reformed: '+ '\n', array)
+print('array origin: '+ '\n', array_origin)
+print('columns: '+ '\n', columns)
+print('index: '+ '\n', index)

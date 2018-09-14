@@ -1,12 +1,13 @@
 from WindPy import *
 import pandas as pd
 import pymysql
+import math
 
 
 w.start()
 
 def SingleStockGrowthRate(StockId):
-    data = w.wsd(StockId, "pct_chg,trade_status", "ED-120TD", "2017-10-31", "ShowBlank=-1;PriceAdj=F")
+    data = w.wsd(StockId, "pct_chg,trade_status", "ED-120TD", "2018-03-30", "ShowBlank=-1;PriceAdj=F")
     light = 0
     rawdata = data.Data[0]
     # print(rawdata)
@@ -38,25 +39,76 @@ def SingleStockGrowthRate(StockId):
         df['Date'] = index_dates
         df[StockId] = data.Data[0]
         df[StockId] = df[StockId].astype(float)
+        # print(df)
         return df
 
 
 # x = SingleStockGrowthRate("399102.SZ")
 # print(x)
+# w.stop()
 
+def SingleStockGrowthRate_HK(StockId):
+    data = w.wsd(StockId, "pct_chg,trade_status", "ED-120TD", "2018-03-30", "TradingCalendar=HKEX;PriceAdj=F")
+    light = 0
+    rawdata = data.Data[0]
+    # print(rawdata)
+    status = data.Data[1]
+    # print(status[-1])
+    # listed less than 120 trade days
+    for i in rawdata:
+        if i == "NaN" or i is None or math.isnan(i):
+            if status[rawdata.index(i)] == "交易":
+                i = 0
+            else:
+                light = 1
+                break
+    # suspended
+    # for j in status:
+    #     if j is None or j == "停牌一天":
+    #         light = 2
+    #         break
+    if status[-1] == "停牌一天":
+        light = 2
+
+    if light != 0:
+        return None
+    elif light == 0:
+        date_raw = data.Times
+        date_count = data.Times.__len__()
+        index_dates = []
+        for i in range(date_count):
+            date_format = str(date_raw[i])[:10]
+            index_dates.append(date_format)
+        df = pd.DataFrame()
+        df['Date'] = index_dates
+        df[StockId] = data.Data[0]
+        df = df.fillna(0)
+        df[StockId] = df[StockId].astype(float)
+        # print(df)
+        return df
+
+# y = SingleStockGrowthRate_HK("3908.HK")
+# print(y)
+# w.stop()
 
 def SingleBeta(StockId, IndexId):
-    df_SH_Index = SingleStockGrowthRate(IndexId)
-    df_SH_Stock = SingleStockGrowthRate(StockId)
+    if IndexId == "HSI.HI":
+        df_SH_Index = SingleStockGrowthRate_HK(IndexId)
+        df_SH_Stock = SingleStockGrowthRate_HK(StockId)
+    else:
+        df_SH_Index = SingleStockGrowthRate(IndexId)
+        df_SH_Stock = SingleStockGrowthRate(StockId)
+
     if df_SH_Stock is None:
         beta = 1
     else:
         df = pd.merge(df_SH_Index, df_SH_Stock, how='left', on='Date')
         beta = df[StockId].cov(df[IndexId]) / df[IndexId].var()
+    # print("%.4f" % beta)
     return "%.4f" % beta
 
 
-# result = SingleBeta("300083.SZ", "399102.SZ")
+# result = SingleBeta("0268.HK", "HSI.HI")
 # print(result)
 # pass
 
@@ -65,8 +117,9 @@ def DBquery(Product_ID, board):
     conn = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='Matao_2012', db='test', use_unicode=True, charset="utf8")
     cur = conn.cursor()
     sql_statement = "select Occur_Date, Subject_Code, Subject_Name, Market_Value_Original_Currency from Valuation " \
-                    "where Occur_Date = '2017-10-31' and Product_ID = '%s' and Subject_Code like '%s';" % (Product_ID, board)
+                    "where Occur_Date = '2018-03-30' and Product_ID = '%s' and Subject_Code like '%s';" % (Product_ID, board)
     df = pd.read_sql(sql=sql_statement, con=conn)
+    # print(df)
     return df
     cur.close()
     conn.close()
@@ -84,13 +137,18 @@ def getStockList(Product_ID, board, IndexID, board2=None):
     # print(df)
     if IndexID == "000001.SH":
         suffix = ".SH"
+    elif IndexID == "HSI.HI":
+        suffix = ".HK"
     else:
         suffix = ".SZ"
     StockIdList_temp = df["Subject_Code"].values
     StockIdList = []
     BetaList = []
     for i in StockIdList_temp:
-        newi = i[8:]
+        if suffix == ".HK":
+            newi = i[10:]
+        else:
+            newi = i[8:]
         StockID = newi + suffix
         # print(StockID)
         beta = SingleBeta(StockID, IndexID)
@@ -121,7 +179,9 @@ def getStockList(Product_ID, board, IndexID, board2=None):
 # print(result)
 
 productlist = ['GZFB0001', 'GZFB0002', 'GZFB0003', 'GZFB0004']
-boardlist = [['%1102010160%', "000001.SH"], [['%11023101000%', '%11023101001%'], "399001.SZ"], ['%11023101002%', "399101.SZ"], ['%110241013%', "399102.SZ"]]
+# productlist = ['GZFB0003']
+boardlist = [['%1102010160%', "000001.SH"], [['%11023101000%', '%11023101001%'], "399001.SZ"], ['%11023101002%', "399101.SZ"], ['%110241013%', "399102.SZ"], ['%11028301H%', "HSI.HI"]]
+# boardlist = [ ['%11028301H%', "HSI.HI"]]
 
 
 if __name__ == '__main__':
