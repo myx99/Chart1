@@ -1,28 +1,28 @@
-import Common.ProductList as pl
+import Common.GlobalConfig as cf
 
 
 class Product(object):
     def __init__(self):
-        self.id = ""
-        self.start_nav_date = ""
+        self.productID = ''
+        self.StartDate = ''
+        self.EndDate = ''
 
-    def setID(self, ID):
-        self.id = ID
+    def setProduct(self, product_number):
+        self.prodno = product_number
 
-    def setStartNavDate(self, sndate):
-        self.start_nav_date = sndate
+    def getProduct(self):
+        config = cf.GlobalConfig()
+        self.ProductID = config.getConfig(self.prodno, 'ID')
+        self.StartDate = config.getConfig(self.prodno, 'Start_date')
+        self.EndDate = config.getConfig(self.prodno, 'End_date')
+        return self.ProductID, self.StartDate, self.EndDate
 
-    def getID(self):
-        return self.id
-
-    def getStartNavDate(self):
-        return self.start_nav_date
 
 if __name__ == '__main__':
-    plist = pl.ProductList()
-    df = plist.getProductTable()
     p = Product()
-    p.setID(df.iloc[0]["ID"])
-    p.setStartNavDate(df.iloc[0]["Start_Nav_Date"])
-    print(p.getID())
-    print(p.getStartNavDate())
+    p.setProduct('product1')
+    q = p.getProduct()
+    print(q[0], q[1], q[2])
+
+
+
