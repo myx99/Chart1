@@ -1,6 +1,6 @@
 import pymysql
 import pandas as pd
-import Common.MySQLConnection as ms
+import Common.MySQLConnector as ms
 import Common.Product as pr
 
 

@@ -1,6 +1,6 @@
 import pandas as pd
 import Common.GlobalConfig as cf
-import Common.MySQLConnection as ms
+import Common.MySQLConnector as ms
 
 
 class ProductList(object):

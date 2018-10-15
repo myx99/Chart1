@@ -6,7 +6,8 @@ import pandas as pd
 conn3 = cx_Oracle.connect('wdtest/wdtest@172.17.100.18/testwd')
 cursor = conn3.cursor()
 
-sqls = "select * from trade.Tfundstock"
+sqls = "select trade_days from wind.asharecalendar where S_INFO_EXCHMARKET = 'SZSE' and trade_days >= '20170118' and trade_days <= '20181010' order by trade_days"
+# sqls = "select * from trade.Tfundstock"
 
 df = pd.read_sql(sql=sqls, con=conn3)
 

@@ -2,7 +2,7 @@ import pymysql
 import Common.GlobalConfig as cf
 
 
-class MySQLConnection(object):
+class MySQLConnector(object):
 
     def __init__(self):
         # print("Setting configurations")
@@ -28,6 +28,6 @@ class MySQLConnection(object):
 
 
 if __name__ == '__main__':
-    m = MySQLConnection()
+    m = MySQLConnector()
     m.getConn()
     m.closeConn()

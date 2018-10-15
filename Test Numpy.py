@@ -112,41 +112,59 @@
 # df_temp = df_temp.set_index('AUM')
 # df_temp.plot()
 # plt.show()
-
-from WindPy import *
-import numpy as np
-
-
-# w.start()
 #
-# x = w.wsd("000746.OF", "nav", "2017-01-01", "2017-11-30", "Currency=CNY")
-
-import pandas as pd
-
-
-df = pd.read_excel('C:/Users/taoma/Documents/行研/echarts/test1.xlsx')
-print(df)
-
-columns = df.columns
-index = df.index
-
-columns_count = len(columns)
-index_count = len(index)
+# from WindPy import *
+# import numpy as np
+#
+#
+# # w.start()
+# #
+# # x = w.wsd("000746.OF", "nav", "2017-01-01", "2017-11-30", "Currency=CNY")
+#
+# import pandas as pd
+#
+#
+# df = pd.read_excel('C:/Users/taoma/Documents/行研/echarts/test1.xlsx')
+# print(df)
+#
+# columns = df.columns
+# index = df.index
+#
+# columns_count = len(columns)
+# index_count = len(index)
 
 # print(columns_count, columns, index_count, index)
 
-array = []
-array_origin = []
-for i in range(index_count):
-    for j in range(columns_count):
-        cell_origin = df.iloc[i, j]
-        cell_reform = cell_origin.astype(float) / 700
-        cell_result = '%.0f' % cell_reform
-        cell1 = [i, j, cell_result]
-        cell2 = [i, j, cell_origin]
-        array.append(cell1)
-        array_origin.append(cell2)
-print('array reformed: '+ '\n', array)
-print('array origin: '+ '\n', array_origin)
-print('columns: '+ '\n', columns)
-print('index: '+ '\n', index)
+# array = []
+# array_origin = []
+# for i in range(index_count):
+#     for j in range(columns_count):
+#         cell_origin = df.iloc[i, j]
+#         cell_reform = cell_origin.astype(float) / 700
+#         cell_result = '%.0f' % cell_reform
+#         cell1 = [i, j, cell_result]
+#         cell2 = [i, j, cell_origin]
+#         array.append(cell1)
+#         array_origin.append(cell2)
+# print('array reformed: '+ '\n', array)
+# print('array origin: '+ '\n', array_origin)
+# print('columns: '+ '\n', columns)
+# print('index: '+ '\n', index)
+
+
+# b = '2018-09-21'
+# # c = b[0:3]+b[5:6] + b[8:9]
+# c = b.replace("-", "")
+# print(b, c)
+
+import time
+
+today = time.strftime("%Y%m%d")
+print(today)
+e = '2018-10-02'
+end = e.replace("-", "")
+print(end)
+if today > end:
+    print("yes")
+else:
+    print("no")
